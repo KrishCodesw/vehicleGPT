@@ -1,0 +1,51 @@
+[project]
+name = "vehiclegpt-edge"
+version = "0.1.0"
+description = "VehicleGPT Edge: on-device vehicle assistant"
+requires-python = ">=3.12"
+dependencies = [
+  "pydantic>=2.6",
+  "pydantic-settings>=2.2",
+  "fastapi>=0.110",
+  "uvicorn[standard]>=0.29",
+  "aiosqlite>=0.20",
+  "numpy>=1.26",
+  "python-can>=4.3",
+  "pyyaml>=6.0",
+  "httpx>=0.27",
+  "structlog>=24.1",
+]
+
+[dependency-groups]
+dev = [
+  "pytest>=8.0",
+  "pytest-asyncio>=0.23",
+  "ruff>=0.4",
+  "mypy>=1.10",
+  "hypothesis>=6.100",
+  "pre-commit>=3.7",
+]
+
+[tool.ruff]
+target-version = "py312"
+line-length = 100
+src = ["vgpt", "tests", "bench"]
+
+[tool.ruff.lint]
+select = ["E","F","I","B","UP","N","S","RUF"]
+
+[tool.mypy]
+python_version = "3.12"
+strict = true
+packages = ["vgpt"]
+
+[tool.pytest.ini_options]
+asyncio_mode = "auto"
+testpaths = ["tests"]
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.hatch.build.targets.wheel]
+packages = ["vgpt"]

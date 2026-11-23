@@ -1,0 +1,21 @@
+services:
+  sim:
+    build: { context: ., dockerfile: deploy/Dockerfile.sim }
+    profiles: [dev]
+  core:
+    build: { context: ., dockerfile: deploy/Dockerfile.core }
+    environment:
+      - VGPT_PROFILE=${VGPT_PROFILE:-dev}
+      - VGPT_CLOCK=${VGPT_CLOCK:-wall}
+    deploy:
+      resources:
+        limits: { cpus: "1.0", memory: 512M }
+  llm:
+    image: ghcr.io/ggerganov/llama.cpp:server
+    command: ["--model","/models/model.gguf","--ctx-size","2048","--threads","2"]
+    deploy:
+      resources:
+        limits: { cpus: "1.0", memory: 900M }
+  web:
+    build: { context: apps/web }
+    ports: ["3000:3000"]
